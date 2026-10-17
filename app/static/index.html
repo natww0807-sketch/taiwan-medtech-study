@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f2ea">
+  <meta name="description" content="醫技國考知識模塊題卡複習">
+  <title>醫技國考｜175 個知識模塊</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳至主要內容</a>
+  <div id="setup" class="login-screen hidden">
+    <form id="setup-form" class="login-card">
+      <span class="eyebrow">FIRST RUN SETUP</span>
+      <h1>建立本機登入密碼</h1>
+      <p>題庫與所有學習紀錄只保存在這台電腦。密碼至少 8 個字元，之後從其他裝置連線時也使用同一組密碼。</p>
+      <label for="setup-password">新密碼</label>
+      <input id="setup-password" type="password" autocomplete="new-password" minlength="8" required>
+      <label for="setup-confirm">再次輸入</label>
+      <input id="setup-confirm" type="password" autocomplete="new-password" minlength="8" required>
+      <button class="primary" type="submit">完成首次設定</button>
+      <p id="setup-error" class="error" role="alert"></p>
+    </form>
+  </div>
+  <div id="login" class="login-screen hidden">
+    <form id="login-form" class="login-card">
+      <span class="eyebrow">PRIVATE STUDY · 2026</span>
+      <h1>醫技國考<br>175 個知識模塊</h1>
+      <p>按科目、主題與子題逐個完成知識模塊，依自己的節奏建立完整考點架構。題卡與作答紀錄保存在這台電腦。</p>
+      <label for="password">登入密碼</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="輸入終端機顯示的密碼" required>
+      <button class="primary" type="submit">登入題庫</button>
+      <p id="login-error" class="error" role="alert"></p>
+      <div class="login-foot">本機私人題庫 <span>·</span> 題目與紀錄不經第三方服務</div>
+    </form>
+  </div>
+
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">醫</span>
+        <div><strong>醫技國考</strong><small>175 個知識模塊</small></div>
+      </div>
+      <div class="topbar-right"><span id="top-progress">載入中…</span><button id="logout" class="text-button">登出</button></div>
+    </header>
+    <nav class="tabs" aria-label="主要功能">
+      <button data-tab="today" class="active">模塊學習</button>
+      <button data-tab="categories">分類複習</button>
+      <button data-tab="note-summary">筆記總結</button>
+      <button data-tab="wrong">錯題複習</button>
+      <button data-tab="history">作答歷史</button>
+      <button data-tab="settings">資料與設定</button>
+    </nav>
+
+    <div id="app-status" class="app-status hidden" role="status" aria-live="polite"></div>
+    <main id="main-content">
+      <section id="view-today" class="view">
+        <div class="page-heading"><div><span class="eyebrow">KNOWLEDGE MODULES</span><h1>模塊學習</h1><p id="today-date">依科目、主題與子題逐步完成全部考點</p></div><span id="finish-pill" class="pill">自主進度</span></div>
+        <div class="today-layout">
+          <div class="task-sequence">
+            <div class="section-heading"><h2>從這裡繼續</h2></div>
+            <article class="focus-panel">
+              <div class="step-index">01 / REVIEW</div>
+              <div class="focus-body"><div><h3>未熟練錯題</h3><p>答錯後會持續提醒；只有你按下「標記已熟練」才會移出清單。</p></div><strong id="due-preview" class="focus-count"></strong></div>
+              <button id="start-review" class="primary">重做未熟練錯題 <span aria-hidden="true">→</span></button>
+            </article>
+            <article class="focus-panel">
+              <div class="step-index">02 / CURRENT MODULE</div>
+              <div class="focus-body"><div><h3>繼續知識模塊</h3><p id="today-subject">讀取模塊中…</p></div><strong id="new-preview" class="focus-count"></strong></div>
+              <button id="start-new" class="primary">繼續學習（最多 20 題） <span aria-hidden="true">→</span></button>
+            </article>
+          </div>
+          <aside class="progress-summary" aria-labelledby="progress-title">
+            <div class="section-heading"><h2 id="progress-title">進度摘要</h2><span>六科 · 自主節奏</span></div>
+            <dl class="metric-list">
+              <div class="metric"><dt>完成模塊</dt><dd><strong id="metric-completed">—</strong><small id="metric-module-total">個知識模塊</small></dd></div>
+              <div class="metric"><dt>完成題目</dt><dd><strong id="metric-today">—</strong><small>／4,800 題</small></dd></div>
+              <div class="metric"><dt>未熟練錯題</dt><dd><strong id="metric-due">—</strong><small>題持續提醒</small></dd></div>
+              <div class="metric"><dt>目前模塊</dt><dd><strong id="metric-finish">—</strong><small>完成比例</small></dd></div>
+            </dl>
+          </aside>
+        </div>
+        <div class="section-heading"><h2>六科進度</h2><span id="backlog-note">可自由選擇任何模塊</span></div>
+        <div id="subject-progress" class="subject-list" aria-live="polite"></div>
+        <details id="calendar-details" class="calendar-details" open>
+          <summary><span><span class="eyebrow">MODULE MAP</span><strong>知識模塊總覽</strong><small>依六科與主題整理；可直接從任一子題開始</small></span><span class="disclosure" aria-hidden="true">＋</span></summary>
+          <div id="calendar" class="module-map"></div>
+        </details>
+      </section>
+
+      <section id="view-categories" class="view hidden">
+        <div class="page-heading"><div><span class="eyebrow">TOPIC MAP</span><h1>分類複習</h1><p>可隨時開啟任何知識模塊，練習未做題或重做全部題目；作答會記入總進度與歷史。</p></div></div>
+        <div class="filter-bar">
+          <label>科目<select id="filter-subject"><option value="">全部科目</option></select></label>
+          <label>主題<select id="filter-topic"><option value="">全部主題</option></select></label>
+          <label>狀態<select id="filter-status"><option value="all">全部</option><option value="unseen">未做</option><option value="wrong">曾答錯</option><option value="active_wrong">未熟練錯題</option></select></label>
+        </div>
+        <div id="category-summary" class="list-summary" aria-live="polite"></div>
+        <div id="category-list" class="category-list" aria-live="polite"></div>
+      </section>
+
+      <section id="view-note-summary" class="view hidden">
+        <div class="page-heading"><div><span class="eyebrow">CURRENT NOTES</span><h1>筆記總結</h1><p>依科目、主題與子題整理；每題只顯示目前保存的個人筆記，再次作答或修改後會更新同一份內容。</p></div></div>
+        <div class="filter-bar note-summary-filter">
+          <label>搜尋<input id="note-summary-search" type="search" placeholder="搜尋題號、題幹或筆記"></label>
+          <label>科目<select id="note-summary-subject"><option value="">全部科目</option></select></label>
+          <label>主題<select id="note-summary-topic"><option value="">全部主題</option></select></label>
+          <label>子題<select id="note-summary-subtopic"><option value="">全部子題</option></select></label>
+        </div>
+        <div id="note-summary-count" class="list-summary" aria-live="polite"></div>
+        <div id="note-summary-list" class="note-summary-list" aria-live="polite"></div>
+      </section>
+
+      <section id="view-wrong" class="view hidden">
+        <div class="page-heading"><div><span class="eyebrow">REVIEW LOOP</span><h1>錯題複習</h1><p>答錯後立即加入未熟練清單；答對後仍會保留，直到你手動標記已熟練。</p></div></div>
+        <div class="two-columns">
+          <article class="panel"><h2>未熟練清單</h2><p id="wrong-due-count"></p><button id="wrong-start-due" class="primary">開始未熟練錯題</button></article>
+          <article class="panel"><h2>累積錯題</h2><p id="wrong-total-count"></p><button id="wrong-start-all" class="secondary">重做曾答錯題</button></article>
+        </div>
+        <div id="wrong-list" class="question-list" aria-live="polite"></div>
+      </section>
+
+      <section id="view-history" class="view hidden">
+        <div class="page-heading"><div><span class="eyebrow">ATTEMPT LOG</span><h1>作答歷史</h1><p>每次作答都獨立保存，重做不會覆蓋過去的答案。</p></div></div>
+        <div id="history-list" class="history-list" aria-live="polite"></div>
+      </section>
+
+      <section id="view-settings" class="view hidden">
+        <div class="page-heading"><div><span class="eyebrow">LOCAL DATA</span><h1>資料與設定</h1><p>題卡與個人紀錄只保存在這台電腦。</p></div></div>
+        <div class="two-columns">
+          <article class="panel"><h2>匯出備份</h2><p>完整 ZIP 包含所有作答、錯題階段、個人筆記及筆記圖片。建議定期保存於自己的離線位置。</p><a id="export-link" class="button primary" href="/api/export-full" download>下載完整 ZIP 備份</a><a class="button secondary" href="/api/export" download>僅下載文字 JSON</a></article>
+          <article class="panel"><h2>還原備份</h2><p>完整 ZIP 可一併還原筆記圖片；舊版 JSON 仍可還原文字資料。系統會先留下還原前的 SQLite 與圖片備份。</p><label class="file-label" for="restore-file">選擇 ZIP 或 JSON 備份</label><input id="restore-file" type="file" accept="application/zip,.zip,application/json,.json"><button id="restore-button" class="secondary">還原所選備份</button><div id="restore-confirm" class="restore-confirm hidden"><strong>確認還原這份備份？</strong><p>目前的作答紀錄會被取代。完整 ZIP 還會取代目前的筆記圖片。</p><div class="action-row"><button id="restore-approve" class="primary">確認還原</button><button id="restore-cancel" class="secondary">取消</button></div></div><p id="restore-result" role="status" aria-live="polite"></p></article>
+        </div>
+        <article class="panel"><h2>手機與私人網路連線</h2><p>預設只有這台電腦可以開啟題庫。若要使用手機，請啟用外部裝置連線並重新啟動程式；手機需在同一 Wi-Fi 或同一 Tailscale 私人網路。</p><label class="network-setting"><input id="network-external" type="checkbox"> 允許同 Wi-Fi／Tailscale 裝置連線</label><button id="network-save" class="secondary">儲存連線設定</button><p id="network-status" role="status" aria-live="polite"></p></article>
+      </section>
+    </main>
+  </div>
+
+  <div id="card-overlay" class="card-overlay hidden" role="dialog" aria-modal="true" aria-label="題卡作答">
+    <div class="card-shell">
+      <div class="card-toolbar"><button id="card-close" class="text-button">← 返回</button><span id="card-progress"></span><span id="card-mode"></span></div>
+      <div id="card-content" class="card-content"></div>
+      <div class="card-actions"><p id="card-message" role="alert" aria-live="assertive"></p><button id="card-submit" class="primary">送出答案</button><button id="card-next" class="secondary hidden">下一題 →</button></div>
+    </div>
+  </div>
+
+  <div id="knowledge-overlay" class="knowledge-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="knowledge-title">
+    <div class="knowledge-shell">
+      <div class="knowledge-toolbar">
+        <button id="knowledge-close" class="text-button">← 返回分類</button>
+        <div><span id="knowledge-topic"></span><h2 id="knowledge-title">知識點筆記</h2></div>
+        <button id="knowledge-edit" class="secondary">編輯筆記</button>
+      </div>
+      <div class="knowledge-body">
+        <div id="knowledge-view" class="knowledge-document"></div>
+        <div id="knowledge-editor" class="knowledge-editor hidden">
+          <label for="knowledge-text">修改此分類的知識點筆記</label>
+          <textarea id="knowledge-text" spellcheck="false"></textarea>
+          <p>保存後會保留你的版本；原始匯入筆記更新時不會覆蓋它。</p>
+        </div>
+      </div>
+      <div class="knowledge-actions">
+        <p id="knowledge-status" role="status" aria-live="polite"></p>
+        <button id="knowledge-cancel" class="secondary hidden">取消修改</button>
+        <button id="knowledge-save" class="primary hidden">儲存筆記</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
