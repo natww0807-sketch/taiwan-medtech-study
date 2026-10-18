@@ -65,7 +65,7 @@ jobs:
         with:
           name: shared-content
           path: app
-      - run: python -m pip install "pyinstaller>=6.10,<7"
+      - run: python -m pip install "pyinstaller>=6.10,<7" "tzdata>=2025.2"
       - run: pyinstaller --noconfirm medtech-study.spec
       - run: python tools/smoke_release.py "${{ matrix.executable }}"
         if: runner.os != 'Windows'

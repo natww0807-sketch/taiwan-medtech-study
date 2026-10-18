@@ -23,7 +23,12 @@ def main() -> None:
             env=env,
         )
         try:
-            for _ in range(480):
+            deadline = time.monotonic() + 120
+            while time.monotonic() < deadline:
+                if process.poll() is not None:
+                    raise SystemExit(
+                        f"封裝後的伺服器在啟動時結束（exit code {process.returncode}）"
+                    )
                 try:
                     with urllib.request.urlopen(
                         f"http://127.0.0.1:{port}/api/status", timeout=.5
