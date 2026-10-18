@@ -95,6 +95,6 @@ jobs:
           merge-multiple: true
       - working-directory: release
         run: sha256sum *.zip > SHA256SUMS.txt
-      - run: gh release create "$GITHUB_REF_NAME" release/* --generate-notes --title "醫技國考 $GITHUB_REF_NAME"
+      - run: gh release create "$GITHUB_REF_NAME" release/* --repo "$GITHUB_REPOSITORY" --generate-notes --title "醫技國考 $GITHUB_REF_NAME"
         env:
           GH_TOKEN: ${{ github.token }}
